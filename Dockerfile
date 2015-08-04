@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get -q update && \
   apt-get -y -q dist-upgrade && \
-  apt-get -y -q install rsyslog python-setuptools python-pip curl
+  apt-get -y -q install rsyslog python-setuptools python-pip curl nano
 
 RUN curl https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py -o awslogs-agent-setup.py
 
@@ -26,6 +26,6 @@ RUN python ./awslogs-agent-setup.py -n -r us-east-1 -c /awslogs.conf
 
 RUN pip install supervisor
 COPY supervisord.conf /usr/local/etc/supervisord.conf
-
+COPY start.py /start.py
 EXPOSE 514/tcp 514/udp
-CMD ["/usr/local/bin/supervisord"]
+CMD ["python", "/start.py"]
